@@ -7,7 +7,7 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
+import { doLogout, getUserInfo, loginApi, loginTestApi, registerTestApi } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -167,6 +167,45 @@ export const useUserStore = defineStore({
           await this.logout(true);
         },
       });
+    },
+    async testLogin(
+      params: LoginParams & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { mode, ...loginParams } = params;
+        const data = await loginTestApi(loginParams, mode);
+        // const { token } = data;
+
+        // save token
+        this.setToken('fakeToken1');
+        this.setUserInfo(data);
+        router.replace(PageEnum.BASE_HOME);
+        return data;
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    async testRegister(
+      params: LoginParams & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { mode, ...loginParams } = params;
+        const data = await registerTestApi(loginParams, mode);
+        if (data.code === 0) {
+        }
+        this.setToken('fakeToken1');
+        this.setUserInfo(data);
+        router.replace(PageEnum.BASE_HOME);
+        return data;
+      } catch (error) {
+        return Promise.reject(error);
+      }
     },
   },
 });

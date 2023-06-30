@@ -57,10 +57,13 @@
     setup() {
       const go = useGo();
       const [registerModal, { openModal }] = useModal();
-      const searchInfo = reactive<Recordable>({});
+      const searchInfo = reactive<any>({});
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '账号列表',
         api: getAccountList,
+        pagination: {
+          // current: 2,
+        },
         rowKey: 'id',
         columns,
         formConfig: {
@@ -72,7 +75,6 @@
         showTableSetting: true,
         bordered: true,
         handleSearchInfoFn(info) {
-          console.log('handleSearchInfoFn', info);
           return info;
         },
         actionColumn: {
@@ -89,7 +91,7 @@
         });
       }
 
-      function handleEdit(record: Recordable) {
+      function handleEdit(record: any) {
         console.log(record);
         openModal(true, {
           record,
@@ -97,7 +99,7 @@
         });
       }
 
-      function handleDelete(record: Recordable) {
+      function handleDelete(record: any) {
         console.log(record);
       }
 
@@ -117,7 +119,7 @@
         reload();
       }
 
-      function handleView(record: Recordable) {
+      function handleView(record: any) {
         go('/system/account_detail/' + record.id);
       }
 

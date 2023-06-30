@@ -12,18 +12,23 @@ import {
 } from './model/systemModel';
 import { defHttp } from '/@/utils/http/axios';
 
+const url = '/basic-api';
 enum Api {
-  AccountList = '/system/getAccountList',
-  IsAccountExist = '/system/accountExist',
-  DeptList = '/system/getDeptList',
-  setRoleStatus = '/system/setRoleStatus',
-  MenuList = '/system/getMenuList',
-  RolePageList = '/system/getRoleListByPage',
-  GetAllRoleList = '/system/getAllRoleList',
+  // AccountList = `${url}/system/getAccountList`,
+  AccountList = `/api/system/getAccountList`,
+  IsAccountExist = `${url}/system/accountExist`,
+  DeptList = `${url}/system/getDeptList`,
+  setRoleStatus = `${url}/system/setRoleStatus`,
+  MenuList = `${url}/system/getMenuList`,
+  RolePageList = `${url}/system/getRoleListByPage`,
+  GetAllRoleList = `${url}/system/getAllRoleList`,
 }
 
-export const getAccountList = (params: AccountParams) =>
-  defHttp.get<AccountListGetResultModel>({ url: Api.AccountList, params });
+export const getAccountList = (params: AccountParams) => {
+  console.log('params', params);
+
+  return defHttp.get<AccountListGetResultModel>({ url: Api.AccountList, params });
+};
 
 export const getDeptList = (params?: DeptListItem) =>
   defHttp.get<DeptListGetResultModel>({ url: Api.DeptList, params });

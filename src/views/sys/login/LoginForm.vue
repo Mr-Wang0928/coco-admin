@@ -68,6 +68,12 @@
           {{ t('sys.login.registerButton') }}
         </Button>
       </ACol>
+      <ACol :md="6" :xs="24">
+        <Button block @click="testLogin()"> testLogin </Button>
+      </ACol>
+      <!-- <ACol :md="6" :xs="24">
+        <Button block @click="testRegister()"> testRegister </Button>
+      </ACol> -->
     </ARow>
 
     <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
@@ -119,7 +125,7 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'vben',
+    account: 'admin',
     password: '123456',
   });
 
@@ -156,4 +162,36 @@
       loading.value = false;
     }
   }
+
+  const testLogin = async () => {
+    console.log('aaaaaaaa');
+
+    const data = await validForm();
+    if (!data) return;
+    loading.value = true;
+
+    try {
+      const userInfo = await userStore.testLogin({
+        password: data.password,
+        username: data.account,
+        mode: 'none', //不要默认的错误提示
+      });
+      console.log('userInfo', userInfo);
+      if (userInfo) {
+        notification.success({
+          message: t('sys.login.loginSuccessTitle'),
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+          duration: 3,
+        });
+      }
+    } catch (error) {
+      createErrorModal({
+        title: '提示',
+        content: (error as unknown as Error).message,
+        getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+      });
+    } finally {
+      loading.value = false;
+    }
+  };
 </script>

@@ -1,13 +1,16 @@
 import { MockMethod } from 'vite-plugin-mock';
 import { resultError, resultSuccess, getRequestToken, requestParams } from '../_util';
 
+// const url = '/basic-api'
+const url = '';
+
 export function createFakeUserList() {
   return [
     {
       userId: '1',
-      username: 'vben',
+      username: 'admin',
       realName: 'Vben Admin',
-      avatar: '',
+      avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',
       desc: 'manager',
       password: '123456',
       token: 'fakeToken1',
@@ -24,7 +27,7 @@ export function createFakeUserList() {
       username: 'test',
       password: '123456',
       realName: 'test user',
-      avatar: '',
+      avatar: 'https://q1.qlogo.cn/g?b=qq&nk=339449197&s=640',
       desc: 'tester',
       token: 'fakeToken2',
       homePath: '/dashboard/workbench',
@@ -46,7 +49,7 @@ const fakeCodeList: any = {
 export default [
   // mock user login
   {
-    url: '/basic-api/login',
+    url: `${url}/login`,
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -69,7 +72,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/getUserInfo',
+    url: `${url}/getUserInfo`,
     method: 'get',
     response: (request: requestParams) => {
       const token = getRequestToken(request);
@@ -82,7 +85,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/getPermCode',
+    url: `${url}/getPermCode`,
     timeout: 200,
     method: 'get',
     response: (request: requestParams) => {
@@ -98,7 +101,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/logout',
+    url: `${url}/logout`,
     timeout: 200,
     method: 'get',
     response: (request: requestParams) => {
@@ -112,7 +115,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/testRetry',
+    url: `${url}/testRetry`,
     statusCode: 405,
     method: 'get',
     response: () => {

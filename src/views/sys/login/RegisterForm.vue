@@ -10,7 +10,7 @@
           :placeholder="t('sys.login.userName')"
         />
       </FormItem>
-      <FormItem name="mobile" class="enter-x">
+      <!-- <FormItem name="mobile" class="enter-x">
         <Input
           size="large"
           v-model:value="formData.mobile"
@@ -25,7 +25,7 @@
           v-model:value="formData.sms"
           :placeholder="t('sys.login.smsCode')"
         />
-      </FormItem>
+      </FormItem> -->
       <FormItem name="password" class="enter-x">
         <StrengthMeter
           size="large"
@@ -70,10 +70,14 @@
   import LoginFormTitle from './LoginFormTitle.vue';
   import { Form, Input, Button, Checkbox } from 'ant-design-vue';
   import { StrengthMeter } from '/@/components/StrengthMeter';
-  import { CountdownInput } from '/@/components/CountDown';
+  // import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useUserStore } from '/@/store/modules/user';
 
+  const userStore = useUserStore();
+  const { notification, createErrorModal } = useMessage();
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
@@ -99,6 +103,28 @@
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
-    console.log(data);
+    try {
+      loading.value = true;
+      const userInfo = await userStore.testRegister({
+        username: formData.account,
+        password: formData.password,
+      });
+      console.log('userInfo', userInfo);
+      if (userInfo) {
+        notification.success({
+          message: t('sys.login.loginSuccessTitle'),
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+          duration: 3,
+        });
+      }
+    } catch (error) {
+      createErrorModal({
+        title: '提示',
+        content: (error as unknown as Error).message,
+        // getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+      });
+    } finally {
+      loading.value = false;
+    }
   }
 </script>

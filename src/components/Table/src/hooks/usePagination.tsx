@@ -35,6 +35,7 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
           ...unref(configRef),
           ...(pagination ?? {}),
         };
+        itemRender;
       }
     },
   );
